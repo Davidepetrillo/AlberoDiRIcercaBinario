@@ -78,6 +78,82 @@ class BinaryTree
         }
     }
 
+    public void PreOrder(Node root)
+    {
+        if(root == null)
+        {
+            return;
+        }
+        Console.Write(root.data + " , ");
+        PreOrder(root.left);
+        PreOrder(root.right);
+    }
+
+    public void PostOrder(Node root)
+    {
+        if (root == null)
+        {
+            return;
+        }
+        PostOrder(root.left);
+        PostOrder(root.right);
+        Console.Write(root.data + " , ");
+
+    }
+
+
+    public Node searchMinValue(Node node)
+    {
+        if (node == null || node.data == 0)
+            return null;
+
+        if(node.left == null)
+        {
+            return node;
+        }
+        return searchMinValue(node.left);
+    }
+
+    public Node searchMaxValue(Node node)
+    {
+        if (node == null || node.data == 0)
+            return null;
+
+        if (node.right == null)
+        {
+            return node;
+        }
+        return searchMaxValue(node.right);
+    }
+
+    public Node Remove(Node node, int newData)
+    {
+        if(node == null)
+        {
+            return node;
+        }
+
+        int compareValue = newData - node.data;
+
+        if(compareValue > 0)
+        {
+            node.right = Remove(node.right, newData);
+        }
+        else if(compareValue < 0)
+        {
+            node.left = Remove(node.left, newData);
+        } 
+        else if(node.left != null && node.right!= null)
+        {
+            node.data = searchMinValue(node.right).data;
+            node.right = Remove(node.right, node.data);
+        }
+        else
+        {
+            node = (node.left != null) ? node.left : node.right;
+        }
+        return node;
+    }
     public static void Main(string[] args)
     {
         BinaryTree binaryTree = new BinaryTree();
@@ -93,6 +169,24 @@ class BinaryTree
         binaryTree.Insert(binaryTree.GetRoot(), 90);
 
         Console.WriteLine("In-order traversal binary search tree");
+        binaryTree.InOrder(binaryTree.GetRoot());
+        Console.WriteLine();
+        Console.WriteLine("Pre-order traversal binary search tree");
+        binaryTree.PreOrder(binaryTree.GetRoot());
+        Console.WriteLine();
+        Console.WriteLine("Post-order traversal binary search tree");
+        binaryTree.PostOrder(binaryTree.GetRoot());
+        Console.WriteLine();
+        Console.WriteLine("Minimum value");
+        Node minNode = binaryTree.searchMinValue(binaryTree.GetRoot());
+        Console.Write(minNode.data);
+        Console.WriteLine();
+        Console.WriteLine("Maximum value");
+        Node maxNode = binaryTree.searchMaxValue(binaryTree.GetRoot());
+        Console.Write(maxNode.data);
+        Console.WriteLine();
+        Console.WriteLine("Delete node is 10:");
+        binaryTree.Remove(binaryTree.GetRoot(), 10);
         binaryTree.InOrder(binaryTree.GetRoot());
 
     }
